@@ -14,7 +14,7 @@ const Header = () => {
   //  Header Function Return
   return (
     <div className='root'>
-      <AppBar position='fixed' elevation={1}>
+      <AppBar position='relative' elevation={1}>
         <Toolbar className='transparent'>
           <IconButton edge='start' aria-label='Shoe Store'>
             <BookmarksIcon />
