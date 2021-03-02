@@ -9,6 +9,9 @@ const typeDefs = gql`
     url: String!
     desc: String!
   }
+  type Mutation {
+    addBookmark(url: String!, desc: String!): Bookmark
+  }
 `;
 
 const authors = [
@@ -32,6 +35,11 @@ const resolvers = {
   Query: {
     bookmark: async (root, args, context) => {
       return authors;
+    },
+  },
+  Mutation: {
+    addBookmark: async (_, { url, desc }) => {
+      console.log(url, desc);
     },
   },
 };
