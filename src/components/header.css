@@ -1,0 +1,11 @@
+.transparent {
+  background-color: rgb(175, 174, 209);
+  border: none;
+}
+.logoImg {
+  width: 35px;
+}
+.root {
+  flex-grow: 1;
+  margin-bottom: 10px;
+}
