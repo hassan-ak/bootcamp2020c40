@@ -28,6 +28,7 @@ export const Content = () => {
         url: textfield.value,
         desc: desc.value,
       },
+      refetchQueries: [{ query: BookMarksQuery }],
     });
     console.log(textfield.value);
   };

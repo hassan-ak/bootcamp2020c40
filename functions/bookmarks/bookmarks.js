@@ -1,4 +1,6 @@
 const { ApolloServer, gql } = require("apollo-server-lambda");
+const faunadb = require("faunadb"),
+  q = faunadb.query;
 
 const typeDefs = gql`
   type Query {
@@ -31,15 +33,55 @@ const authors = [
     desc: "this is a github gatsby official repository",
   },
 ];
+
 const resolvers = {
   Query: {
     bookmark: async (root, args, context) => {
-      return authors;
+      try {
+        var client = new faunadb.Client({
+          secret: "fnAEDGfH6oACBVZllRWmXKmeuCVkLnJQVQT12r7W",
+        });
+        var result = await client.query(
+          q.Map(
+            q.Paginate(q.Match(q.Index("all_links"))),
+            q.Lambda((x) => q.Get(x))
+          )
+        );
+        return result.data.map((d) => {
+          return {
+            id: d.ts,
+            url: d.data.url,
+            desc: d.data.desc,
+          };
+        });
+      } catch (err) {
+        console.log("err", err);
+      }
     },
   },
   Mutation: {
     addBookmark: async (_, { url, desc }) => {
-      console.log(url, desc);
+      try {
+        var client = new faunadb.Client({
+          secret: "fnAEDGfH6oACBVZllRWmXKmeuCVkLnJQVQT12r7W",
+        });
+        var result = await client.query(
+          q.Create(q.Collection("links"), {
+            data: {
+              url,
+              desc,
+            },
+          })
+        );
+        console.log(
+          "Document Created and Inserted in Container: " + result.ref.id
+        );
+        return result.ref.data;
+      } catch (error) {
+        console.log("Error: ");
+        console.log(error);
+      }
+      // console.log('url--desc', url,'desc',desc);
     },
   },
 };
@@ -49,6 +91,4 @@ const server = new ApolloServer({
   resolvers,
 });
 
-const handler = server.createHandler();
-
-module.exports = { handler };
+exports.handler = server.createHandler();
