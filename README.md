@@ -3,7 +3,7 @@
 Practice Project
 * Bootcamp 2020 Project 12D: Create A Bookmarking Application With FaunaDB, Netlify And Gatsby
 
-SpaceX app using
+BookMarking app using
 * Netlify
 * Gatsby
 * GraphQL
